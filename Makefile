@@ -21,10 +21,12 @@ ${OBJ}: config.h config.mk
 
 dwm: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
+	cd dwmblocks && make	
 
 clean:
 	rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz *.orig *.rej
-
+	cd dwmblocks && make clean
+	
 dist: clean
 	mkdir -p dwm-${VERSION}
 	cp -R LICENSE Makefile README config.mk\
@@ -41,12 +43,10 @@ install: all
 	sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	mkdir -p ${DESTDIR}${PREFIX}/share/dwm
-	cp -f larbs.mom ${DESTDIR}${PREFIX}/share/dwm
-	chmod 644 ${DESTDIR}${PREFIX}/share/dwm/larbs.mom
 	echo "\n\nAcordate de instalar os programas de config.h"
+	cd dwmblocks && make install
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
-		${DESTDIR}${PREFIX}/share/dwm/larbs.mom\
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 
 .PHONY: all options clean dist install uninstall

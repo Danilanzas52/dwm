@@ -1,0 +1,24 @@
+#!/bin/bash
+bd=/sys/devices/pci0000:00/0000:00:02.0/drm/card*/card*-eDP-1/intel_backlight/brightness
+
+bdv=$(cat $bd)
+
+INTERVAL=25
+
+if [ $# = 2 ];
+then
+	INTERVAL=$2
+fi
+
+case $1 in
+	up)
+		echo $(( bdv + $INTERVAL )) > $bd
+		cat $bd
+	;;
+	down)
+		echo $(( bdv - $INTERVAL )) > $bd
+		cat $bd
+	;;
+	*)
+	echo "$bdv"
+esac
